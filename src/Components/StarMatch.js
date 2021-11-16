@@ -1,3 +1,7 @@
+import styled from 'styled-components';
+import Numbers from './Numbers';
+import Stars from './Stars';
+
 const utils = {
 	// Sum an array
 	sum: (arr) => arr.reduce((acc, curr) => acc + curr, 0),
@@ -27,37 +31,62 @@ const utils = {
 	},
 };
 
+const Game = styled.div`
+	max-width: 500px;
+	margin: 0 auto;
+`;
+
+const Wrapper = styled.div`
+	display: flex;
+`;
+
+const HelpDiv = styled.div`
+	color: #666;
+	margin: 10px;
+	text-align: center;
+`;
+
+const LeftContent = styled.div`
+	text-align: center;
+	width: 50%;
+	border: thin solid #ddd;
+`;
+
+const RightContent = styled.div`
+	text-align: center;
+	padding: 10px;
+	width: 50%;
+	border: thin solid #ddd;
+`;
+
+const Timer = styled.div`
+	color: #666;
+	margin-top: 3px;
+	margin-left: 3px;
+`;
+
 const StarMatch = () => {
+	const stars = 5;
 	return (
-		<div className='game'>
-			<div className='help'>Pick 1 or more numbers that sum to the number of stars</div>
-			<div className='body'>
-				<div className='left'>
-					<div className='star' />
-					<div className='star' />
-					<div className='star' />
-					<div className='star' />
-					<div className='star' />
-					<div className='star' />
-					<div className='star' />
-					<div className='star' />
-					<div className='star' />
-				</div>
-				<div className='right'>
-					<button className='number'>1</button>
-					<button className='number'>2</button>
-					<button className='number'>3</button>
-					<button className='number'>4</button>
-					<button className='number'>5</button>
-					<button className='number'>6</button>
-					<button className='number'>7</button>
-					<button className='number'>8</button>
-					<button className='number'>9</button>
-				</div>
-			</div>
-			<div className='timer'>Time Remaining: 10</div>
-		</div>
+		<Game>
+			<HelpDiv>Pick 1 or more numbers that sum to the number of stars</HelpDiv>
+			<Wrapper>
+				<LeftContent>
+					<Stars stars={utils.range(0, stars)} />
+				</LeftContent>
+				<RightContent>
+					<Numbers numbers={utils.range(1, 9)} />
+				</RightContent>
+			</Wrapper>
+			<Timer>Time Remaining: 10</Timer>
+		</Game>
 	);
 };
 
 export default StarMatch;
+
+// .game-done .message {
+// 	font-size: 250%;
+// 	font-weight: bold;
+// 	margin: 15px;
+//   }
