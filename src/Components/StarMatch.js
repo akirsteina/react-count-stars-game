@@ -42,8 +42,8 @@ const Timer = styled.div`
 
 const StarMatch = () => {
 	const [stars, setStars] = useState(utils.random(1, 9));
-	const [availableNumbers, setAvailableNumbers] = useState([1, 2, 3, 4, 5]);
-	const [candidateNumbers, setCandidateNumbers] = useState([2, 3]);
+	const [availableNumbers, setAvailableNumbers] = useState(utils.range(1, 9));
+	const [candidateNumbers, setCandidateNumbers] = useState([]);
 
 	const candidatesAreWrong = utils.sum(candidateNumbers) > stars;
 
@@ -57,6 +57,22 @@ const StarMatch = () => {
 		return 'available';
 	};
 
+	const onNumberClick = (number, currentStatus) => {
+		// currentStatus -> newStatus
+		if (currentStatus === 'used') {
+			return;
+		}
+		const newCandidateNumbers = [...candidateNumbers, number];
+		if (utils.sum(newCandidateNumbers) !== stars) {
+			setCandidateNumbers(newCandidateNumbers);
+		} else {
+			const newAvailableNumbers = availableNumbers.filter((n) => !newCandidateNumbers.includes(n));
+			setAvailableNumbers(newAvailableNumbers);
+			setCandidateNumbers([]);
+			setStars(utils.randomSumIn(newAvailableNumbers, 9));
+		}
+	};
+
 	return (
 		<Game>
 			<HelpDiv>Pick 1 or more numbers that sum to the number of stars</HelpDiv>
@@ -66,7 +82,7 @@ const StarMatch = () => {
 				</LeftContent>
 				<RightContent>
 					{utils.range(1, 9).map((number) => (
-						<PlayNumber key={number} number={number} status={numberStatus(number)} />
+						<PlayNumber key={number} number={number} status={numberStatus(number)} onClick={onNumberClick} />
 					))}
 				</RightContent>
 			</Wrapper>

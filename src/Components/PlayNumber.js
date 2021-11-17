@@ -1,4 +1,3 @@
-import { Fragment } from 'react';
 import styled from 'styled-components';
 
 const PlayNum = styled.button`
@@ -27,7 +26,7 @@ const colors = {
 
 const PlayNumber = (props) => {
 	return (
-		<PlayNum onClick={() => console.log(props.number)} status={props.status}>
+		<PlayNum onClick={() => props.onClick(props.number, props.status)} status={props.status}>
 			{props.number}
 		</PlayNum>
 	);
