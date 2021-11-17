@@ -1,8 +1,11 @@
+import { useEffect, useState } from 'react';
+
 import styled from 'styled-components';
+import utils from '../Utils/utils';
+
 import PlayNumber from './PlayNumber';
 import Stars from './Stars';
-import utils from '../Utils/utils';
-import { useState } from 'react';
+import PlayAgain from './PlayAgain';
 
 const Game = styled.div`
 	max-width: 500px;
@@ -44,8 +47,20 @@ const StarMatch = () => {
 	const [stars, setStars] = useState(utils.random(1, 9));
 	const [availableNumbers, setAvailableNumbers] = useState(utils.range(1, 9));
 	const [candidateNumbers, setCandidateNumbers] = useState([]);
+	const [secondsLeft, setSecondsLeft] = useState(10);
+
+	useEffect(() => {
+		if (secondsLeft > 0) {
+			const timer = setTimeout(() => {
+				setSecondsLeft(secondsLeft - 1);
+			}, 1000);
+			return () => clearTimeout(timer);
+		}
+	});
 
 	const candidatesAreWrong = utils.sum(candidateNumbers) > stars;
+
+	const gameIsDone = availableNumbers.length === 0;
 
 	const numberStatus = (number) => {
 		if (!availableNumbers.includes(number)) {
@@ -78,13 +93,23 @@ const StarMatch = () => {
 		}
 	};
 
+	const resetGame = () => {
+		setStars(utils.random(1, 9));
+		setAvailableNumbers(utils.range(1, 9));
+		setCandidateNumbers([]);
+	};
+
+	const gameContent = gameIsDone ? (
+		<PlayAgain resetGame={resetGame} />
+	) : (
+		<Stars stars={utils.range(1, stars)} />
+	);
+
 	return (
 		<Game>
 			<HelpDiv>Pick 1 or more numbers that sum to the number of stars</HelpDiv>
 			<Wrapper>
-				<LeftContent>
-					<Stars stars={utils.range(1, stars)} />
-				</LeftContent>
+				<LeftContent>{gameContent}</LeftContent>
 				<RightContent>
 					{utils.range(1, 9).map((number) => (
 						<PlayNumber
@@ -96,7 +121,7 @@ const StarMatch = () => {
 					))}
 				</RightContent>
 			</Wrapper>
-			<Timer>Time Remaining: 10</Timer>
+			<Timer>Time Remaining: {secondsLeft}</Timer>
 		</Game>
 	);
 };
