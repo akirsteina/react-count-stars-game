@@ -1,5 +1,5 @@
 import styled from 'styled-components';
-import Numbers from './Numbers';
+import PlayNumber from './PlayNumber';
 import Stars from './Stars';
 import utils from '../Utils/utils';
 import { useState } from 'react';
@@ -42,6 +42,20 @@ const Timer = styled.div`
 
 const StarMatch = () => {
 	const [stars, setStars] = useState(utils.random(1, 9));
+	const [availableNumbers, setAvailableNumbers] = useState([1, 2, 3, 4, 5]);
+	const [candidateNumbers, setCandidateNumbers] = useState([2, 3]);
+
+	const candidatesAreWrong = utils.sum(candidateNumbers) > stars;
+
+	const numberStatus = (number) => {
+		if (!availableNumbers.includes(number)) {
+			return 'used';
+		}
+		if (candidateNumbers.includes(number)) {
+			return candidatesAreWrong ? 'wrong' : 'candidate';
+		}
+		return 'available';
+	};
 
 	return (
 		<Game>
@@ -51,7 +65,9 @@ const StarMatch = () => {
 					<Stars stars={utils.range(1, stars)} />
 				</LeftContent>
 				<RightContent>
-					<Numbers numbers={utils.range(1, 9)} />
+					{utils.range(1, 9).map((number) => (
+						<PlayNumber key={number} number={number} status={numberStatus(number)} />
+					))}
 				</RightContent>
 			</Wrapper>
 			<Timer>Time Remaining: 10</Timer>
