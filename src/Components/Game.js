@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+// import { useEffect, useState } from 'react';
+import useGameState from '../Hooks/use-gamestate';
 
 import styled from 'styled-components';
 import utils from '../Utils/utils';
@@ -44,19 +45,26 @@ const Timer = styled.div`
 `;
 
 const Game = (props) => {
-	const [stars, setStars] = useState(utils.random(1, 9));
-	const [availableNumbers, setAvailableNumbers] = useState(utils.range(1, 9));
-	const [candidateNumbers, setCandidateNumbers] = useState([]);
-	const [secondsLeft, setSecondsLeft] = useState(10);
+	// const [stars, setStars] = useState(utils.random(1, 9));
+	// const [availableNumbers, setAvailableNumbers] = useState(utils.range(1, 9));
+	// const [candidateNumbers, setCandidateNumbers] = useState([]);
+	// const [secondsLeft, setSecondsLeft] = useState(10);
 
-	useEffect(() => {
-		if (secondsLeft > 0 && availableNumbers.length > 0) {
-			const timer = setTimeout(() => {
-				setSecondsLeft(secondsLeft - 1);
-			}, 1000);
-			return () => clearTimeout(timer);
-		}
-	});
+	// useEffect(() => {
+	// 	if (secondsLeft > 0 && availableNumbers.length > 0) {
+	// 		const timer = setTimeout(() => {
+	// 			setSecondsLeft(secondsLeft - 1);
+	// 		}, 1000);
+	// 		return () => clearTimeout(timer);
+	// 	}
+	// });
+	const {
+		stars,
+		availableNumbers,
+		candidateNumbers,
+		secondsLeft,
+		setGameState,
+	} = useGameState();
 
 	const candidatesAreWrong = utils.sum(candidateNumbers) > stars;
 
@@ -85,16 +93,17 @@ const Game = (props) => {
 			currentStatus === 'available'
 				? [...candidateNumbers, number]
 				: candidateNumbers.filter((candidateNum) => candidateNum !== number);
-		if (utils.sum(newCandidateNumbers) !== stars) {
-			setCandidateNumbers(newCandidateNumbers);
-		} else {
-			const newAvailableNumbers = availableNumbers.filter(
-				(num) => !newCandidateNumbers.includes(num)
-			);
-			setAvailableNumbers(newAvailableNumbers);
-			setCandidateNumbers([]);
-			setStars(utils.randomSumIn(newAvailableNumbers, 9));
-		}
+		setGameState(newCandidateNumbers);
+		// if (utils.sum(newCandidateNumbers) !== stars) {
+		// 	setCandidateNumbers(newCandidateNumbers);
+		// } else {
+		// 	const newAvailableNumbers = availableNumbers.filter(
+		// 		(num) => !newCandidateNumbers.includes(num)
+		// 	);
+		// 	setAvailableNumbers(newAvailableNumbers);
+		// 	setCandidateNumbers([]);
+		// 	setStars(utils.randomSumIn(newAvailableNumbers, 9));
+		// }
 	};
 
 	// const resetGame = () => {
