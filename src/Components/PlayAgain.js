@@ -1,3 +1,4 @@
+import { Fragment } from 'react';
 import styled from 'styled-components';
 
 const Button = styled.button`
@@ -14,8 +15,29 @@ const Button = styled.button`
 	cursor: pointer;
 `;
 
+const GameStatus = styled.div`
+	margin-top: 10px;
+	font-weight: bold;
+	font-size: 30px;
+	color: ${(props) => (props.gameStatus === 'won' ? 'green' : 'red')};
+`;
+
 const PlayAgain = (props) => {
-	return <Button onClick={props.resetGame}>Play Again</Button>;
+	let message;
+	if (props.gameStatus === 'won') {
+		message = (
+			<GameStatus gameStatus={props.gameStatus}>Good job, you won!</GameStatus>
+		);
+	}
+	if (props.gameStatus === 'lost') {
+		message = <GameStatus gameStatus={props.gameStatus}>Game over!</GameStatus>;
+	}
+	return (
+		<Fragment>
+			{message}
+			<Button onClick={props.resetGame}>Play Again</Button>
+		</Fragment>
+	);
 };
 
 export default PlayAgain;
