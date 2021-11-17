@@ -106,7 +106,7 @@ const Game = (props) => {
 		// }
 	};
 
-	// replace with mounting/unmounting game by updating game id upon clicking the playAgain button
+	// replace with mounting/unmounting game by updating game id in key attribute upon clicking the playAgain button
 	// const resetGame = () => {
 	// 	setStars(utils.random(1, 9));
 	// 	setAvailableNumbers(utils.range(1, 9));
