@@ -62,11 +62,16 @@ const StarMatch = () => {
 		if (currentStatus === 'used') {
 			return;
 		}
-		const newCandidateNumbers = [...candidateNumbers, number];
+		const newCandidateNumbers =
+			currentStatus === 'available'
+				? [...candidateNumbers, number]
+				: candidateNumbers.filter((candidateNum) => candidateNum !== number);
 		if (utils.sum(newCandidateNumbers) !== stars) {
 			setCandidateNumbers(newCandidateNumbers);
 		} else {
-			const newAvailableNumbers = availableNumbers.filter((n) => !newCandidateNumbers.includes(n));
+			const newAvailableNumbers = availableNumbers.filter(
+				(num) => !newCandidateNumbers.includes(num)
+			);
 			setAvailableNumbers(newAvailableNumbers);
 			setCandidateNumbers([]);
 			setStars(utils.randomSumIn(newAvailableNumbers, 9));
@@ -82,7 +87,12 @@ const StarMatch = () => {
 				</LeftContent>
 				<RightContent>
 					{utils.range(1, 9).map((number) => (
-						<PlayNumber key={number} number={number} status={numberStatus(number)} onClick={onNumberClick} />
+						<PlayNumber
+							key={number}
+							number={number}
+							status={numberStatus(number)}
+							onClick={onNumberClick}
+						/>
 					))}
 				</RightContent>
 			</Wrapper>
